@@ -1,0 +1,45 @@
+* {
+    background-color: black;
+    color: green;
+}
+
+header {
+    width: 100%;
+    padding: 1%;
+}
+
+header a {
+    float: left;
+}
+
+header p {
+    float: right;
+}
+
+main {
+    position: relative;
+}
+
+section {
+    position: absolute;
+    margin-top: 15%;
+    left: 25%;
+    width: 50%;
+}
+
+#container-homepage {
+    text-align: center;
+}
+
+button {
+    background-color: green;
+    color: black;
+    padding: 1%;
+    border-radius: 10px;
+}
+
+button:hover {
+    background-color: black;
+    color: green;
+    border: 1px solid green;
+}
