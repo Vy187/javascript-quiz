@@ -11,7 +11,7 @@ const questions = [
         question: "The condition in an if/else statement is enclosed within ______",
         a: "quotes",
         b: "curly brackets",
-        c: "parentheses",
+        c: "parenthesis",
         d: "square brackers",
         correct: "b"
     },
@@ -28,7 +28,7 @@ const questions = [
         a: "commas",
         b: "curly brackets",
         c: "quotes",
-        d: "parentheses",
+        d: "parenthesis",
         correct: "c"
     },
     {
@@ -41,4 +41,29 @@ const questions = [
     }
 ]
 
-document.querySelector("button").addEventListener("click", console.log(questions[0]))
+function renderQuestion() {
+    document.querySelector("#container-homepage").setAttribute("id", "container-question");
+    document.querySelector("#title").setAttribute("id", "question");
+    document.querySelector("#description").remove();
+    document.querySelector("#start").setAttribute("id", "a")
+
+    b = document.createElement("button");
+    c = document.createElement("button");
+    d = document.createElement("button");
+
+    b.setAttribute("id", "b");
+    c.setAttribute("id", "c");
+    d.setAttribute("id", "d");
+
+    document.querySelector("#container-question").appendChild(b);
+    document.querySelector("#container-question").appendChild(c);
+    document.querySelector("#container-question").appendChild(d);
+}
+
+document.querySelector("button").addEventListener("click", function (event) {
+    switch (event.target.getAttribute("id")) {
+        case 'start':
+            renderQuestion();
+            break;
+    }
+})
