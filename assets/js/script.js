@@ -41,7 +41,9 @@ const questions = [
     }
 ]
 
-function renderQuestion() {
+currentQuestion = 0;
+
+function setupQuestion() {
     document.querySelector("#container-homepage").setAttribute("id", "container-question");
     document.querySelector("#title").setAttribute("id", "question");
     document.querySelector("#description").remove();
@@ -58,11 +60,31 @@ function renderQuestion() {
     document.querySelector("#container-question").appendChild(b);
     document.querySelector("#container-question").appendChild(c);
     document.querySelector("#container-question").appendChild(d);
+
+    renderQuestion();
 }
 
-document.querySelector("button").addEventListener("click", function (event) {
+function renderQuestion() {
+    if (currentQuestion < 5) {
+        document.querySelector("#question").textContent = questions[currentQuestion].question;
+        document.querySelector("#a").textContent = "a. " + questions[currentQuestion].a;
+        document.querySelector("#b").textContent = "b. " + questions[currentQuestion].b
+        document.querySelector("#c").textContent = "c. " + questions[currentQuestion].c;
+        document.querySelector("#d").textContent = "d. " + questions[currentQuestion].d;
+        currentQuestion++;
+    }
+}
+
+document.querySelector("section").addEventListener("click", function (event) {
+    console.log(event.target.getAttribute("id"));
     switch (event.target.getAttribute("id")) {
         case 'start':
+            setupQuestion();
+            break;
+        case 'a':
+        case 'b':
+        case 'c':
+        case 'd':
             renderQuestion();
             break;
     }
