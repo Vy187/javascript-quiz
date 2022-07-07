@@ -52,31 +52,30 @@ function setupQuestion() {
     b = document.createElement("button");
     c = document.createElement("button");
     d = document.createElement("button");
+    selection = document.createElement("article");
 
     b.setAttribute("id", "b");
     c.setAttribute("id", "c");
     d.setAttribute("id", "d");
+    selection.setAttribute("style", "visibility: hidden");
 
     document.querySelector("#container-question").appendChild(b);
     document.querySelector("#container-question").appendChild(c);
     document.querySelector("#container-question").appendChild(d);
+    document.querySelector("#container-question").appendChild(selection);
 
     renderQuestion();
 }
 
 function renderQuestion() {
-    if (currentQuestion < 5) {
-        document.querySelector("#question").textContent = questions[currentQuestion].question;
-        document.querySelector("#a").textContent = "a. " + questions[currentQuestion].a;
-        document.querySelector("#b").textContent = "b. " + questions[currentQuestion].b
-        document.querySelector("#c").textContent = "c. " + questions[currentQuestion].c;
-        document.querySelector("#d").textContent = "d. " + questions[currentQuestion].d;
-        currentQuestion++;
-    }
+    document.querySelector("#question").textContent = questions[currentQuestion].question;
+    document.querySelector("#a").textContent = "a. " + questions[currentQuestion].a;
+    document.querySelector("#b").textContent = "b. " + questions[currentQuestion].b
+    document.querySelector("#c").textContent = "c. " + questions[currentQuestion].c;
+    document.querySelector("#d").textContent = "d. " + questions[currentQuestion].d;
 }
 
 document.querySelector("section").addEventListener("click", function (event) {
-    console.log(event.target.getAttribute("id"));
     switch (event.target.getAttribute("id")) {
         case 'start':
             setupQuestion();
@@ -85,7 +84,18 @@ document.querySelector("section").addEventListener("click", function (event) {
         case 'b':
         case 'c':
         case 'd':
+            if (event.target.id == questions[currentQuestion].correct) {
+                document.querySelector("article").textContent = "Correct";
+                document.querySelector("article").setAttribute("style", "visibility: visible");
+            } else {
+                document.querySelector("article").textContent = "Wrong";
+                document.querySelector("article").setAttribute("style", "visibility: visible");
+            }
+            
+            setTimeout(function () { document.querySelector("article").setAttribute("style", "visibility: hidden"); }, 1000)
+            if (currentQuestion < 4) { currentQuestion++; }
             renderQuestion();
+
             break;
     }
 })

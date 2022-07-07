@@ -35,6 +35,11 @@ section {
     display: block;
 }
 
+article {
+    padding-top: 2%;
+    border-top: 1px solid green;
+}
+
 button {
     background-color: green;
     color: black;
