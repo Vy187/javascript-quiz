@@ -42,9 +42,23 @@ const questions = [
 ]
 
 currentQuestion = 0;
+score = 75;
+
+function timer() {
+    var timerInterval = setInterval(function () {
+        score--;
+        document.querySelector("#timer").textContent = "Timer: " + score;
+
+        if (score < 0) {
+            score = 0;
+            document.querySelector("#timer").textContent = "Timer: " + score;
+            clearInterval(timerInterval);
+        }
+    }, 1000)
+}
 
 function setupQuestion() {
-    document.querySelector("#container-homepage").setAttribute("id", "container-question");
+    document.querySelector("#homepage").setAttribute("id", "questions");
     document.querySelector("#title").setAttribute("id", "question");
     document.querySelector("#description").remove();
     document.querySelector("#start").setAttribute("id", "a")
@@ -59,10 +73,10 @@ function setupQuestion() {
     d.setAttribute("id", "d");
     selection.setAttribute("style", "visibility: hidden");
 
-    document.querySelector("#container-question").appendChild(b);
-    document.querySelector("#container-question").appendChild(c);
-    document.querySelector("#container-question").appendChild(d);
-    document.querySelector("#container-question").appendChild(selection);
+    document.querySelector("#questions").appendChild(b);
+    document.querySelector("#questions").appendChild(c);
+    document.querySelector("#questions").appendChild(d);
+    document.querySelector("#questions").appendChild(selection);
 
     renderQuestion();
 }
@@ -75,26 +89,60 @@ function renderQuestion() {
     document.querySelector("#d").textContent = "d. " + questions[currentQuestion].d;
 }
 
+function results() {
+    document.querySelector("#a").remove();
+    document.querySelector("#b").remove();
+    document.querySelector("#c").remove();
+
+    finalScoreP = document.createElement("p");
+    container = document.createElement("aside");
+    intialPrompt = document.createElement("p");
+    intialText = document.createElement("input")
+
+    document.querySelector("#questions").setAttribute("id", "results");
+    document.querySelector("#question").setAttribute("id", "title");
+    document.querySelector("#d").setAttribute("id", "submit")
+    finalScoreP.setAttribute("id", "final");
+    intialPrompt.setAttribute("id", "prompt");
+    intialText.setAttribute("style", "text", "id", "intialText");
+
+    document.querySelector("#title").textContent = "All Done!";
+    document.querySelector("#submit").textContent = "Submit";
+    finalScoreP.textContent = "Your final score is " + score + ".";
+    intialPrompt.textContent = "Enter intials:";
+
+    document.querySelector("#title").after(finalScoreP);
+    finalScoreP.after(container);
+    container.appendChild(intialPrompt);
+    container.appendChild(intialText);
+    container.appendChild(document.querySelector("#submit"));
+}
+
 document.querySelector("section").addEventListener("click", function (event) {
     switch (event.target.getAttribute("id")) {
         case 'start':
             setupQuestion();
+            timer();
             break;
         case 'a':
         case 'b':
         case 'c':
         case 'd':
             if (event.target.id == questions[currentQuestion].correct) {
-                document.querySelector("article").textContent = "Correct";
+                document.querySelector("article").textContent = "Correct!";
                 document.querySelector("article").setAttribute("style", "visibility: visible");
             } else {
-                document.querySelector("article").textContent = "Wrong";
+                document.querySelector("article").textContent = "Wrong!";
                 document.querySelector("article").setAttribute("style", "visibility: visible");
+                score = score - 10;
             }
-            
             setTimeout(function () { document.querySelector("article").setAttribute("style", "visibility: hidden"); }, 1000)
-            if (currentQuestion < 4) { currentQuestion++; }
-            renderQuestion();
+            if (currentQuestion < 4) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                results();
+            }
 
             break;
     }

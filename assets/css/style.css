@@ -27,11 +27,11 @@ section {
     width: 50%;
 }
 
-#container-homepage {
+#homepage {
     text-align: center;
 }
 
-#container-question button{
+#questions button{
     display: block;
 }
 
@@ -51,4 +51,21 @@ button:hover {
     background-color: black;
     color: green;
     border: 1px solid green;
+}
+
+aside {
+    display: flex;
+}
+
+aside input {
+    border: 1px solid green;
+    height: 18px;
+}
+
+aside button{
+    font-size: 12px;
+    height: 18px;
+    padding: 0%;
+    width: 50px;
+    border-radius: 5px;
 }
