@@ -84,9 +84,35 @@ function results() {
 function viewScores() {
     document.querySelector("section").remove();
 
+    data = JSON.parse(localStorage.getItem("scores"));
+    scoreOrder = 1;
+    scoreboardS = document.createElement("section");
+    scoreboardH1 = document.createElement("h1");
+    restartB = document.createElement("button");
+    clearB = document.createElement("button");
+
+    scoreboardS.setAttribute("id", "scoreboard");
+    scoreboardH1.setAttribute("id", "title");
+    restartB.setAttribute("id", "restart");
+    clearB.setAttribute("id", "clear");
+
+    scoreboardH1.textContent = "Scoreboard";
+    restartB.textContent = "Restart";
+    clearB.textContent = "Clear Scoreboard";
+
+    document.querySelector("main").appendChild(scoreboardS);
+    scoreboardS.appendChild(scoreboardH1);
+    for(i = 0; i < data.length; i++) {
+        currentScore = document.createElement("p");
+        currentScore.textContent = scoreOrder + ". " + data[i][0] + " - " + data[i][1];
+        scoreboardS.appendChild(currentScore);
+        scoreOrder++;
+    }
+    scoreboardS.appendChild(restartB);
+    scoreboardS.appendChild(clearB);
 }
 
-document.querySelector("section").addEventListener("click", function (event) {
+document.querySelector("main").addEventListener("click", function (event) {
     switch (event.target.getAttribute("id")) {
         case 'start':
             document.querySelector("#homepage").setAttribute("id", "questions");
@@ -158,6 +184,7 @@ document.querySelector("section").addEventListener("click", function (event) {
                 document.querySelector("article").textContent = "Intials cannot contain numbers";
             } else {
                 tempScore = [document.querySelector("#intial-text").value.toUpperCase(), score];
+
                 if (localStorage.getItem("scores") == null) {
                     localStorage.setItem("scores", JSON.stringify([tempScore]));
                 } else {
@@ -173,11 +200,12 @@ document.querySelector("section").addEventListener("click", function (event) {
                 setTimeout(function () { document.querySelector("article").setAttribute("style", "visibility: hidden"); }, 1000)
             }
             break;
-        case 'go-back':
+        case 'restart':
             window.location.reload();
             break;
         case 'clear':
             localStorage.removeItem("scores");
+            viewScores()
             break;
     }
 })
