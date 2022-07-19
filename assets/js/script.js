@@ -1,3 +1,5 @@
+currentQuestion = 0;
+score = 75;
 const questions = [
     {
         question: "Commonly used data types DO NOT include ______",
@@ -41,46 +43,6 @@ const questions = [
     }
 ]
 
-currentQuestion = 0;
-score = 75;
-
-function timer() {
-    var timerInterval = setInterval(function () {
-        score--;
-        document.querySelector("#timer").textContent = "Timer: " + score;
-
-        if (score < 0) {
-            score = 0;
-            document.querySelector("#timer").textContent = "Timer: " + score;
-            clearInterval(timerInterval);
-        }
-    }, 1000)
-}
-
-function setupQuestion() {
-    document.querySelector("#homepage").setAttribute("id", "questions");
-    document.querySelector("#title").setAttribute("id", "question");
-    document.querySelector("#description").remove();
-    document.querySelector("#start").setAttribute("id", "a")
-
-    b = document.createElement("button");
-    c = document.createElement("button");
-    d = document.createElement("button");
-    selection = document.createElement("article");
-
-    b.setAttribute("id", "b");
-    c.setAttribute("id", "c");
-    d.setAttribute("id", "d");
-    selection.setAttribute("style", "visibility: hidden");
-
-    document.querySelector("#questions").appendChild(b);
-    document.querySelector("#questions").appendChild(c);
-    document.querySelector("#questions").appendChild(d);
-    document.querySelector("#questions").appendChild(selection);
-
-    renderQuestion();
-}
-
 function renderQuestion() {
     document.querySelector("#question").textContent = questions[currentQuestion].question;
     document.querySelector("#a").textContent = "a. " + questions[currentQuestion].a;
@@ -104,7 +66,8 @@ function results() {
     document.querySelector("#d").setAttribute("id", "submit")
     finalScoreP.setAttribute("id", "final");
     intialPrompt.setAttribute("id", "prompt");
-    intialText.setAttribute("style", "text", "id", "intialText");
+    intialText.setAttribute("style", "text");
+    intialText.setAttribute("id", "intial-text");
 
     document.querySelector("#title").textContent = "All Done!";
     document.querySelector("#submit").textContent = "Submit";
@@ -118,11 +81,46 @@ function results() {
     container.appendChild(document.querySelector("#submit"));
 }
 
+function viewScores() {
+    document.querySelector("section").remove();
+
+}
+
 document.querySelector("section").addEventListener("click", function (event) {
     switch (event.target.getAttribute("id")) {
         case 'start':
-            setupQuestion();
-            timer();
+            document.querySelector("#homepage").setAttribute("id", "questions");
+            document.querySelector("#title").setAttribute("id", "question");
+            document.querySelector("#description").remove();
+            document.querySelector("#start").setAttribute("id", "a")
+
+            b = document.createElement("button");
+            c = document.createElement("button");
+            d = document.createElement("button");
+            selection = document.createElement("article");
+
+            b.setAttribute("id", "b");
+            c.setAttribute("id", "c");
+            d.setAttribute("id", "d");
+            selection.setAttribute("style", "visibility: hidden");
+
+            document.querySelector("#questions").appendChild(b);
+            document.querySelector("#questions").appendChild(c);
+            document.querySelector("#questions").appendChild(d);
+            document.querySelector("#questions").appendChild(selection);
+
+            renderQuestion();
+
+            timerInterval = setInterval(function () {
+                if (score !== 0) {
+                    score--;
+                    document.querySelector("#timer").textContent = "Timer: " + score;
+                } else {
+                    document.querySelector("#timer").textContent = "Timer: " + score;
+                    clearInterval(timerInterval);
+                    results();
+                }
+            }, 1000)
             break;
         case 'a':
         case 'b':
@@ -130,20 +128,56 @@ document.querySelector("section").addEventListener("click", function (event) {
         case 'd':
             if (event.target.id == questions[currentQuestion].correct) {
                 document.querySelector("article").textContent = "Correct!";
-                document.querySelector("article").setAttribute("style", "visibility: visible");
             } else {
                 document.querySelector("article").textContent = "Wrong!";
-                document.querySelector("article").setAttribute("style", "visibility: visible");
-                score = score - 10;
+                if (score > 10) {
+                    score = score - 10;
+                } else {
+                    score = 0;
+                }
             }
+
+            document.querySelector("article").setAttribute("style", "visibility: visible");
             setTimeout(function () { document.querySelector("article").setAttribute("style", "visibility: hidden"); }, 1000)
+
             if (currentQuestion < 4) {
                 currentQuestion++;
                 renderQuestion();
             } else {
+                clearInterval(timerInterval);
+                document.querySelector("#timer").textContent = "Timer: " + score;
                 results();
             }
+            break;
+        case 'submit':
+            if (document.querySelector("#intial-text").value === "") {
+                document.querySelector("article").textContent = "Cannot submit something blank";
+            } else if (document.querySelector("#intial-text").value.length > 3) {
+                document.querySelector("article").textContent = "Intials cannot be greater than 3 letters";
+            } else if (!/^[a-zA-Z\s.,]+$/.test(document.querySelector("#intial-text").value)) {
+                document.querySelector("article").textContent = "Intials cannot contain numbers";
+            } else {
+                tempScore = [document.querySelector("#intial-text").value.toUpperCase(), score];
+                if (localStorage.getItem("scores") == null) {
+                    localStorage.setItem("scores", JSON.stringify([tempScore]));
+                } else {
+                    addScore = JSON.parse(localStorage.getItem("scores"));
+                    addScore.push(tempScore);
+                    localStorage.setItem("scores", JSON.stringify(addScore));
+                }
+                viewScores();
+            }
 
+            if (document.querySelector("article") !== null) {
+                document.querySelector("article").setAttribute("style", "visibility: visible");
+                setTimeout(function () { document.querySelector("article").setAttribute("style", "visibility: hidden"); }, 1000)
+            }
+            break;
+        case 'go-back':
+            window.location.reload();
+            break;
+        case 'clear':
+            localStorage.removeItem("scores");
             break;
     }
 })
