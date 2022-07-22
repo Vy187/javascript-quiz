@@ -64,8 +64,6 @@ function results() {
     document.querySelector("#questions").setAttribute("id", "results");
     document.querySelector("#question").setAttribute("id", "title");
     document.querySelector("#d").setAttribute("id", "submit")
-    finalScoreP.setAttribute("id", "final");
-    intialPrompt.setAttribute("id", "prompt");
     intialText.setAttribute("style", "text");
     intialText.setAttribute("id", "intial-text");
 
@@ -92,7 +90,6 @@ function viewScores() {
     clearB = document.createElement("button");
 
     scoreboardS.setAttribute("id", "scoreboard");
-    scoreboardH1.setAttribute("id", "title");
     restartB.setAttribute("id", "restart");
     clearB.setAttribute("id", "clear");
 
@@ -102,14 +99,17 @@ function viewScores() {
 
     document.querySelector("main").appendChild(scoreboardS);
     scoreboardS.appendChild(scoreboardH1);
-    for(i = 0; i < data.length; i++) {
-        currentScore = document.createElement("p");
-        currentScore.textContent = scoreOrder + ". " + data[i][0] + " - " + data[i][1];
-        scoreboardS.appendChild(currentScore);
-        scoreOrder++;
+    if (data != null) {
+        for (i = 0; i < data.length; i++) {
+            currentScore = document.createElement("p");
+            currentScore.textContent = scoreOrder + ". " + data[i][0] + " - " + data[i][1];
+            scoreboardS.appendChild(currentScore);
+            scoreOrder++;
+        }
     }
     scoreboardS.appendChild(restartB);
     scoreboardS.appendChild(clearB);
+
 }
 
 document.querySelector("main").addEventListener("click", function (event) {
@@ -205,7 +205,7 @@ document.querySelector("main").addEventListener("click", function (event) {
             break;
         case 'clear':
             localStorage.removeItem("scores");
-            viewScores()
+            viewScores();
             break;
     }
 })
