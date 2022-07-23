@@ -83,7 +83,6 @@ function viewScores() {
     document.querySelector("section").remove();
 
     data = JSON.parse(localStorage.getItem("scores"));
-    scoreOrder = 1;
     scoreboardS = document.createElement("section");
     scoreboardH1 = document.createElement("h1");
     restartB = document.createElement("button");
@@ -100,11 +99,10 @@ function viewScores() {
     document.querySelector("main").appendChild(scoreboardS);
     scoreboardS.appendChild(scoreboardH1);
     if (data != null) {
-        for (i = 0; i < data.length; i++) {
+        for (i = 0, l = 1; i < data.length; i++, l++) {
             currentScore = document.createElement("p");
-            currentScore.textContent = scoreOrder + ". " + data[i][0] + " - " + data[i][1];
+            currentScore.textContent = l + ". " + data[i][0] + " - " + data[i][1];
             scoreboardS.appendChild(currentScore);
-            scoreOrder++;
         }
     }
     scoreboardS.appendChild(restartB);
